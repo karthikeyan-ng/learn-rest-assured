@@ -4,14 +4,25 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.Properties;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-
 public class GoogleMapPlacesApiTests {
+
+    private Properties properties;
+
+    @BeforeEach
+    public void loadProperties() throws IOException {
+        properties = new Properties();
+        properties.load(getClass().getClassLoader().getResourceAsStream("environment.properties"));
+    }
 
     @DisplayName("GET: Find Location for the given radius")
     @Test
@@ -19,7 +30,7 @@ public class GoogleMapPlacesApiTests {
 
         //https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&key=AIzaSyCBsZ88adr5hIyelfJHyVbM2BBwR84TJYE
 
-        RestAssured.baseURI = "https://maps.googleapis.com";
+        RestAssured.baseURI = properties.getProperty("HOST_URI");
 
         given().
             param("location", "-33.8670522,151.1957362").
@@ -50,7 +61,7 @@ public class GoogleMapPlacesApiTests {
     @Test
     void simplePlacesLookup_usingPost() {
 
-        RestAssured.baseURI = "http://216.10.245.166";
+        RestAssured.baseURI = properties.getProperty("HOST_URI1");
 
         given().
             queryParam("key", "qaclick123").
@@ -97,7 +108,7 @@ public class GoogleMapPlacesApiTests {
                 "\"language\": \"en-AU\""+
                 "}";
 
-        RestAssured.baseURI = "http://216.10.245.166";
+        RestAssured.baseURI = properties.getProperty("HOST_URI1");
 
         //1. Grab the response
         Response response = given().
