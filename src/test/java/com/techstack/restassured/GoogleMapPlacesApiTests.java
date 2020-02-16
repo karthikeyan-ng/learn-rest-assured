@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.Properties;
 
+import static com.techstack.restassured.GoogleMapPlacesApiConsts.ADD_A_PLACE;
+import static com.techstack.restassured.GoogleMapPlacesApiConsts.DELETE_A_PLACE;
+import static com.techstack.restassured.GoogleMapPlacesApiConsts.NEAR_BY_SEARCH;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -37,7 +40,7 @@ public class GoogleMapPlacesApiTests {
             param("radius", "500").
             param("key", properties.getProperty("PLACES_API_KEY")).
         when().
-            get("/maps/api/place/nearbysearch/json").
+            get(NEAR_BY_SEARCH).
         then().
             assertThat().
                 statusCode(200).
@@ -79,7 +82,7 @@ public class GoogleMapPlacesApiTests {
                     "\"language\": \"en-AU\""+
                     "}").
         when().
-            post("/maps/api/place/add/json").
+            post(ADD_A_PLACE).
         then().
             assertThat().
                 statusCode(200).
@@ -115,7 +118,7 @@ public class GoogleMapPlacesApiTests {
                 queryParam("key", properties.getProperty("PLACES_API_KEY1")).
                 body(addPlacePayLoad).
                 when().
-                    post("/maps/api/place/add/json").
+                    post(ADD_A_PLACE).
                 then().
                     assertThat().
                         statusCode(200).
@@ -139,7 +142,7 @@ public class GoogleMapPlacesApiTests {
             queryParam("key", "qaclick123").
         body("{\"place_id\": \"" + placeId + "\"}").
             when().
-                post("/maps/api/place/delete/json").
+                post(DELETE_A_PLACE).
             then().
                 assertThat().
                     statusCode(200).
