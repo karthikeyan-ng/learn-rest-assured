@@ -35,7 +35,7 @@ public class GoogleMapPlacesApiTests {
         given().
             param("location", "-33.8670522,151.1957362").
             param("radius", "500").
-            param("key", "AIzaSyCBsZ88adr5hIyelfJHyVbM2BBwR84TJYE").
+            param("key", properties.getProperty("PLACES_API_KEY")).
         when().
             get("/maps/api/place/nearbysearch/json").
         then().
@@ -64,7 +64,7 @@ public class GoogleMapPlacesApiTests {
         RestAssured.baseURI = properties.getProperty("HOST_URI1");
 
         given().
-            queryParam("key", "qaclick123").
+            queryParam("key", properties.getProperty("PLACES_API_KEY1")).
             body("{"+
                     "\"location\": {"+
                     "\"lat\": -33.8669710,"+
@@ -112,7 +112,7 @@ public class GoogleMapPlacesApiTests {
 
         //1. Grab the response
         Response response = given().
-                queryParam("key", "qaclick123").
+                queryParam("key", properties.getProperty("PLACES_API_KEY1")).
                 body(addPlacePayLoad).
                 when().
                     post("/maps/api/place/add/json").
