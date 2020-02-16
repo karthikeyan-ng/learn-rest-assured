@@ -122,6 +122,21 @@ public class GoogleMapPlacesApiTests {
         String placeId = path.get("place_id");
         System.out.println(placeId);
 
+        //3. Using placeId and Delete the place
+
+        given().
+            queryParam("key", "qaclick123").
+        body("{\"place_id\": \"" + placeId + "\"}").
+            when().
+                post("/maps/api/place/delete/json").
+            then().
+                assertThat().
+                    statusCode(200).
+                        and().
+                    contentType(ContentType.JSON).
+                        and().
+                    body("status", equalTo("OK"));
+
     }
 
 }
