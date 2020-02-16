@@ -32,7 +32,9 @@ public class GoogleMapPlacesApiTests {
                 contentType(ContentType.JSON).
                 and().
 //                body("results[0].geometry.location.lat", equalTo(-33.8688197d))
-                body("results[0].name", equalTo("Sydney"))
+                body("results[0].name", equalTo("Sydney")).
+                and().
+                body("results[0].place_id", equalTo("ChIJP3Sa8ziYEmsRUKgyFmh9AQM"))
         ;
 
 
