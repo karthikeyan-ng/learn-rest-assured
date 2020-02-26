@@ -3,6 +3,7 @@ package com.techstack.restassured;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
+import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,7 @@ import static com.techstack.restassured.GoogleMapPlacesApiConsts.DELETE_A_PLACE;
 import static com.techstack.restassured.GoogleMapPlacesApiConsts.NEAR_BY_SEARCH;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GoogleMapPlacesApiTests {
 
@@ -110,6 +112,11 @@ public class GoogleMapPlacesApiTests {
                 response();
 
         System.out.println(response.asString());
+
+        XmlPath xmlPath = new XmlPath(response.asString());
+        assertEquals("OK", xmlPath.getString("response.status"));
+        assertEquals("APP", xmlPath.getString("response.scope"));
+
     }
 
     @DisplayName("Add a location to Google Places and Delete the same place by using PlaceId")
