@@ -62,25 +62,15 @@ public class GoogleMapPlacesApiTests {
      */
     @DisplayName("Add a location to Google Places.")
     @Test
-    void simplePlacesLookup_usingPost() {
+    void simplePlacesLookup_usingPost() throws Exception {
 
         RestAssured.baseURI = properties.getProperty("HOST_URI1");
 
+        String content = JsonUtils.generateStringFromResource("AddALocation_PayLoad.json");
+
         given().
             queryParam("key", properties.getProperty("PLACES_API_KEY1")).
-            body("{"+
-                    "\"location\": {"+
-                    "\"lat\": -33.8669710,"+
-                    "\"lng\": 151.1958750"+
-                    "},"+
-                    "\"accuracy\": 50,"+
-                    "\"name\": \"Google Shoes!\","+
-                    "\"phone_number\": \"(02) 9374 4000\","+
-                    "\"address\": \"48 Pirrama Road, Pyrmont, NSW 2009, Australia\","+
-                    "\"types\": [\"shoe_store\"],"+
-                    "\"website\": \"http://www.google.com.au/\","+
-                    "\"language\": \"en-AU\""+
-                    "}").
+            body(content).
         when().
             post(ADD_A_PLACE).
         then().
@@ -95,28 +85,16 @@ public class GoogleMapPlacesApiTests {
 
     @DisplayName("Add a location to Google Places and Delete the same place by using PlaceId")
     @Test
-    void addAPlaceAndDeleteAddedPlace_usingPostAndDelete() {
+    void addAPlaceAndDeleteAddedPlace_usingPostAndDelete() throws Exception {
 
-        String addPlacePayLoad = "{"+
-                "\"location\": {"+
-                "\"lat\": -33.8669710,"+
-                "\"lng\": 151.1958750"+
-                "},"+
-                "\"accuracy\": 50,"+
-                "\"name\": \"Google Shoes!\","+
-                "\"phone_number\": \"(02) 9374 4000\","+
-                "\"address\": \"48 Pirrama Road, Pyrmont, NSW 2009, Australia\","+
-                "\"types\": [\"shoe_store\"],"+
-                "\"website\": \"http://www.google.com.au/\","+
-                "\"language\": \"en-AU\""+
-                "}";
+        String content = JsonUtils.generateStringFromResource("AddALocation_PayLoad.json");
 
         RestAssured.baseURI = properties.getProperty("HOST_URI1");
 
         //1. Grab the response
         Response response = given().
                 queryParam("key", properties.getProperty("PLACES_API_KEY1")).
-                body(addPlacePayLoad).
+                body(content).
                 when().
                     post(ADD_A_PLACE).
                 then().
@@ -139,7 +117,7 @@ public class GoogleMapPlacesApiTests {
         //3. Using placeId and Delete the place
 
         given().
-            queryParam("key", "qaclick123").
+            queryParam("key", properties.getProperty("PLACES_API_KEY1")).
         body("{\"place_id\": \"" + placeId + "\"}").
             when().
                 post(DELETE_A_PLACE).
