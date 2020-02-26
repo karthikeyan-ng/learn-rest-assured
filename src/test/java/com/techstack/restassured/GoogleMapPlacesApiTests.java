@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.Properties;
 
-import static com.techstack.restassured.GoogleMapPlacesApiConsts.ADD_A_PLACE;
+import static com.techstack.restassured.GoogleMapPlacesApiConsts.ADD_A_PLACE_JSON;
+import static com.techstack.restassured.GoogleMapPlacesApiConsts.ADD_A_PLACE_XML;
 import static com.techstack.restassured.GoogleMapPlacesApiConsts.DELETE_A_PLACE;
 import static com.techstack.restassured.GoogleMapPlacesApiConsts.NEAR_BY_SEARCH;
 import static io.restassured.RestAssured.given;
@@ -62,32 +63,60 @@ public class GoogleMapPlacesApiTests {
      */
     @DisplayName("Add a location to Google Places.")
     @Test
-    void simplePlacesLookup_usingPost() throws Exception {
+    void simplePlacesLookup_usingJsonPost() throws Exception {
 
         RestAssured.baseURI = properties.getProperty("HOST_URI1");
 
-        String content = JsonUtils.generateStringFromResource("AddALocation_PayLoad.json");
+        String content = JsonUtils.generateStringFromJsonResource("AddALocation_PayLoad.json");
 
         given().
             queryParam("key", properties.getProperty("PLACES_API_KEY1")).
             body(content).
         when().
-            post(ADD_A_PLACE).
+            post(ADD_A_PLACE_JSON).
         then().
             assertThat().
                 statusCode(200).
                 and().
-                contentType(ContentType.JSON).
-                and().
-                body("status", equalTo("OK"))
+                contentType(ContentType.JSON)
+//                and().
+//                body("status", equalTo("OK"))
         ;
+    }
+
+    /**
+     * Add a location to Google Places. But, this end point is removed from Google Places API.
+     * Hence, I used the modified version as shown below
+     */
+    @DisplayName("Add a location to Google Places.")
+    @Test
+    void simplePlacesLookup_usingXmlPost() throws Exception {
+
+        RestAssured.baseURI = properties.getProperty("HOST_URI1");
+
+        String content = JsonUtils.generateStringFromXmlResource("AddALocation_PayLoad.xml");
+
+        Response response = given().
+            queryParam("key", properties.getProperty("PLACES_API_KEY1")).
+            body(content).
+        when().
+            post(ADD_A_PLACE_XML).
+        then().
+            assertThat().
+                statusCode(200).
+                    and().
+                contentType(ContentType.XML).
+                extract().
+                response();
+
+        System.out.println(response.asString());
     }
 
     @DisplayName("Add a location to Google Places and Delete the same place by using PlaceId")
     @Test
     void addAPlaceAndDeleteAddedPlace_usingPostAndDelete() throws Exception {
 
-        String content = JsonUtils.generateStringFromResource("AddALocation_PayLoad.json");
+        String content = JsonUtils.generateStringFromJsonResource("AddALocation_PayLoad.json");
 
         RestAssured.baseURI = properties.getProperty("HOST_URI1");
 
@@ -96,7 +125,7 @@ public class GoogleMapPlacesApiTests {
                 queryParam("key", properties.getProperty("PLACES_API_KEY1")).
                 body(content).
                 when().
-                    post(ADD_A_PLACE).
+                    post(ADD_A_PLACE_JSON).
                 then().
                     assertThat().
                         statusCode(200).
