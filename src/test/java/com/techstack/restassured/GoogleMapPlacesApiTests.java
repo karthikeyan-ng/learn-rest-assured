@@ -112,10 +112,11 @@ public class GoogleMapPlacesApiTests {
                 response();
 
         System.out.println(response.asString());
+        String res = response.asString();
 
         XmlPath xmlPath = new XmlPath(response.asString());
-        assertEquals("OK", xmlPath.getString("response.status"));
-        assertEquals("APP", xmlPath.getString("response.scope"));
+        assertEquals("OK", XmlUtils.getValueFromXmlResponse(res, "response.status"));
+        assertEquals("APP", XmlUtils.getValueFromXmlResponse(res, "response.scope"));
 
     }
 
