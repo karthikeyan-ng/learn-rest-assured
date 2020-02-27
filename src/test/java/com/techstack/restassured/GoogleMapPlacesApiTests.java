@@ -46,6 +46,7 @@ public class GoogleMapPlacesApiTests {
         when().
             get(NEAR_BY_SEARCH).
         then().
+            log().all().
             assertThat().
                 statusCode(200).
                 and().
