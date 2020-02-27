@@ -39,6 +39,7 @@ public class GoogleMapPlacesApiTests {
         RestAssured.baseURI = properties.getProperty("HOST_URI");
 
         Response response = given().
+                log().all().
             param("location", "-33.8670522,151.1957362").
             param("radius", "500").
             param("key", properties.getProperty("PLACES_API_KEY")).
