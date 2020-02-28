@@ -97,7 +97,7 @@ public class GoogleMapPlacesApiTests {
 
         RestAssured.baseURI = properties.getProperty("googleMaps.hostUri1");
 
-        String content = JsonUtils.generateStringFromXmlResource("AddALocation_PayLoad.xml");
+        String content = XmlUtils.generateStringFromXmlResource("AddALocation_PayLoad.xml");
 
         Response response = given().
             queryParam("key", properties.getProperty("googleMaps.placesApiKey1")).
