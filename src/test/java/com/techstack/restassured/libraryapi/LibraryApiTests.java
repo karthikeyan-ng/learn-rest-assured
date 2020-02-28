@@ -26,9 +26,9 @@ public class LibraryApiTests {
         properties.load(getClass().getClassLoader().getResourceAsStream("environment.properties"));
     }
 
-    @DisplayName("Add a location to Google Places.")
+    @DisplayName("Add a Book to Library.")
     @Test
-    void simplePlacesLookup_usingJsonPost() throws Exception {
+    void addABook() throws Exception {
 
         RestAssured.baseURI = properties.getProperty("library.hostUri");
 
