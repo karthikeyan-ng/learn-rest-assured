@@ -39,13 +39,13 @@ public class GoogleMapPlacesApiTests {
 
         //https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&key=AIzaSyCBsZ88adr5hIyelfJHyVbM2BBwR84TJYE
 
-        RestAssured.baseURI = properties.getProperty("HOST_URI");
+        RestAssured.baseURI = properties.getProperty("googleMaps.hostUri");
 
         Response response = given().
                 log().all().
             param("location", "-33.8670522,151.1957362").
             param("radius", "500").
-            param("key", properties.getProperty("PLACES_API_KEY")).
+            param("key", properties.getProperty("googleMaps.placesApiKey")).
         when().
             get(NEAR_BY_SEARCH).
         then().
@@ -68,12 +68,12 @@ public class GoogleMapPlacesApiTests {
     @Test
     void simplePlacesLookup_usingJsonPost() throws Exception {
 
-        RestAssured.baseURI = properties.getProperty("HOST_URI1");
+        RestAssured.baseURI = properties.getProperty("googleMaps.hostUri1");
 
         String content = JsonUtils.generateStringFromJsonResource("AddALocation_PayLoad.json");
 
         given().
-            queryParam("key", properties.getProperty("PLACES_API_KEY1")).
+            queryParam("key", properties.getProperty("googleMaps.placesApiKey1")).
             body(content).
         when().
             post(ADD_A_PLACE_JSON).
@@ -95,12 +95,12 @@ public class GoogleMapPlacesApiTests {
     @Test
     void simplePlacesLookup_usingXmlPost() throws Exception {
 
-        RestAssured.baseURI = properties.getProperty("HOST_URI1");
+        RestAssured.baseURI = properties.getProperty("googleMaps.hostUri1");
 
         String content = JsonUtils.generateStringFromXmlResource("AddALocation_PayLoad.xml");
 
         Response response = given().
-            queryParam("key", properties.getProperty("PLACES_API_KEY1")).
+            queryParam("key", properties.getProperty("googleMaps.placesApiKey1")).
             body(content).
         when().
             post(ADD_A_PLACE_XML).
@@ -127,11 +127,11 @@ public class GoogleMapPlacesApiTests {
 
         String content = JsonUtils.generateStringFromJsonResource("AddALocation_PayLoad.json");
 
-        RestAssured.baseURI = properties.getProperty("HOST_URI1");
+        RestAssured.baseURI = properties.getProperty("googleMaps.hostUri1");
 
         //1. Grab the response
         Response response = given().
-                queryParam("key", properties.getProperty("PLACES_API_KEY1")).
+                queryParam("key", properties.getProperty("googleMaps.placesApiKey1")).
                 body(content).
                 when().
                     post(ADD_A_PLACE_JSON).
@@ -155,7 +155,7 @@ public class GoogleMapPlacesApiTests {
         //3. Using placeId and Delete the place
 
         given().
-            queryParam("key", properties.getProperty("PLACES_API_KEY1")).
+            queryParam("key", properties.getProperty("googleMaps.placesApiKey1")).
         body("{\"place_id\": \"" + placeId + "\"}").
             when().
                 post(DELETE_A_PLACE).
