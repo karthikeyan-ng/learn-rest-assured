@@ -8,7 +8,8 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -27,14 +28,22 @@ public class LibraryApiTests {
     }
 
     @DisplayName("Add a Book to Library.")
-    @Test
-    void addABook() throws Exception {
+    @ParameterizedTest(name = "Added a book isbn {0} with aisle {1}")
+    @CsvSource({"xyz, 125", "ghi, 500"})
+    void addABook(String isbn, String aisleNumber) throws Exception {
+
+        System.out.println("Processing for : " + isbn + " and " + aisleNumber);
 
         RestAssured.baseURI = properties.getProperty("library.hostUri");
 
         String content = JsonUtils.generateStringFromJsonResource("AddABook_PayLoad.json");
 
+        content = content.
+                    replaceAll("#isbn", isbn).
+                    replaceAll("#aisleNumber", aisleNumber);
+
         Response response = given().
+            log().all().
             header("Content-Type", ContentType.JSON).
             body(content).
         when().
@@ -46,7 +55,7 @@ public class LibraryApiTests {
 
         JsonPath path = JsonUtils.getJsonPathFromResponse(response.asString());
         String id = JsonUtils.getValueFromJsonResponse(path, "ID");
-        Assertions.assertEquals("ABCDE12345225", id);
+        Assertions.assertEquals(isbn + aisleNumber, id);
     }
 
 }

@@ -1,6 +1,6 @@
 {
-  "name": "Learn Java 8 Advanced Programming",
-  "isbn": "ABCDE12345",
-  "aisle": "225",
+  "name": "Test Book",
+  "isbn": "#isbn",
+  "aisle": "#aisleNumber",
   "author": "Pascal"
 }
