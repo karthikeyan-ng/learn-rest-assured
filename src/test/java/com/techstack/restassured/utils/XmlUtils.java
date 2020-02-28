@@ -1,4 +1,4 @@
-package com.techstack.restassured;
+package com.techstack.restassured.utils;
 
 import io.restassured.path.xml.XmlPath;
 

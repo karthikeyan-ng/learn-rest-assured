@@ -1,4 +1,4 @@
-package com.techstack.restassured;
+package com.techstack.restassured.googlemapsapi;
 
 public class GoogleMapPlacesApiConsts {
 
