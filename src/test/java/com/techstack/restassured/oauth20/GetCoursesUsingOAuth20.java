@@ -1,7 +1,9 @@
 package com.techstack.restassured.oauth20;
 
+import com.techstack.api.beans.GetCourse;
 import com.techstack.restassured.utils.JsonUtils;
 import io.restassured.RestAssured;
+import io.restassured.parsing.Parser;
 import io.restassured.path.json.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +31,12 @@ public class GetCoursesUsingOAuth20 {
 
         RestAssured.baseURI = properties.getProperty("library.hostUri");
 
+        /**
+         * If you are using Authorization Code type you have to use Step 1,2,3
+         * If you are using Client Credentials type you have to use Step 2,3
+         */
+
+        /** STEP-1: Get the Authorization Code from Provider  */
         // Open the Google Login Authorization to validate the Username and password to get the access token code
 //        System.setProperty("webdriver.chrome.driver", "/Users/rabodevops17/Documents/Downloaded Software/chromedriver");
 //        WebDriver driver = new ChromeDriver();
@@ -46,6 +54,8 @@ public class GetCoursesUsingOAuth20 {
         String partialCode = url.split("code")[1];
         String code = partialCode.split("&scope")[0];
         System.out.println(code);
+
+        /** STEP-2: Use the Authorization Code and Call Token service to get AccessToken */
 
         // Call Authorization Service to get the access_token
         String accessTokenResponse = given().
@@ -67,14 +77,16 @@ public class GetCoursesUsingOAuth20 {
         JsonPath path = JsonUtils.getJsonPathFromResponse(accessTokenResponse);
         String accessToken = path.getString("access_token");
 
+        /** STEP-3: Call the Actual Server to get the response by using Access Token */
         // Use the Access Token
-        String response = given().
-            log().all().
+        GetCourse course = given().
             queryParam("access_token", accessToken).
+            expect().defaultParser(Parser.JSON).
         when().
-            get(GET_COURSES).asString();
+            get(GET_COURSES).as(GetCourse.class);
 
-        System.out.println(response);
+        System.out.println(course);
+        System.out.println(course.getInstructor());
     }
 
 }
