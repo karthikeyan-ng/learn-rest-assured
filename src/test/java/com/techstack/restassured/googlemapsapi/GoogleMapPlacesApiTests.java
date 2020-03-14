@@ -1,5 +1,8 @@
 package com.techstack.restassured.googlemapsapi;
 
+import com.sun.tools.javac.util.List;
+import com.techstack.restassured.googlemapsapi.api.AddPlace;
+import com.techstack.restassured.googlemapsapi.api.Location;
 import com.techstack.restassured.utils.JsonUtils;
 import com.techstack.restassured.utils.XmlUtils;
 import io.restassured.RestAssured;
@@ -71,10 +74,12 @@ public class GoogleMapPlacesApiTests {
         RestAssured.baseURI = properties.getProperty("googleMaps.hostUri1");
 
         String content = JsonUtils.generateStringFromJsonResource("AddALocation_PayLoad.json");
+        AddPlace place = createPlace();
 
         given().
             queryParam("key", properties.getProperty("googleMaps.placesApiKey1")).
-            body(content).
+            //body(content).  //<== using JSON as string
+            body(place).      //<== using JSON as a serialized Object
         when().
             post(ADD_A_PLACE_JSON).
         then().
@@ -85,6 +90,22 @@ public class GoogleMapPlacesApiTests {
 //                and().
 //                body("status", equalTo("OK"))
         ;
+    }
+
+    private AddPlace createPlace() {
+        AddPlace addPlace = new AddPlace();
+        addPlace.setAccuracy(50);
+        addPlace.setAddress("48 Pirrama Road, Pyrmont, NSW 2009, Australia");
+        addPlace.setLanguage("en-AU");
+        addPlace.setName("Google Shoes!");
+        addPlace.setPhone_number("(02) 9374 4000");
+        addPlace.setWebsite("http://www.google.com.au/");
+        addPlace.setTypes(List.of("shoe_store"));
+        Location location = new Location();
+        location.setLat(-33.866971);
+        location.setLng(151.195875);
+        addPlace.setLocation(location);
+        return addPlace;
     }
 
     /**
