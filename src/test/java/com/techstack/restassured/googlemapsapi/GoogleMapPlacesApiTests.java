@@ -6,10 +6,14 @@ import com.techstack.restassured.googlemapsapi.api.Location;
 import com.techstack.restassured.utils.JsonUtils;
 import com.techstack.restassured.utils.XmlUtils;
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -90,6 +94,26 @@ public class GoogleMapPlacesApiTests {
 //                and().
 //                body("status", equalTo("OK"))
         ;
+    }
+
+    @DisplayName("Add a location to Google Places using Spec Builder.")
+    @Test
+    void addAPlace_usingJsonPost() throws Exception {
+
+        AddPlace place = createPlace();
+
+        RequestSpecification reqSepc = new RequestSpecBuilder()
+                .setBaseUri(properties.getProperty("googleMaps.hostUri1"))
+                .addQueryParam("key", properties.getProperty("googleMaps.placesApiKey1"))
+                .build();
+
+        ResponseSpecification resSpec = new ResponseSpecBuilder()
+                .expectStatusCode(200).expectContentType(ContentType.JSON).build();
+
+        // Simplified logic
+        given().spec(reqSepc).body(place).
+        when().post(ADD_A_PLACE_JSON).
+        then().spec(resSpec);
     }
 
     private AddPlace createPlace() {
