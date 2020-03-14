@@ -1,6 +1,7 @@
 package com.techstack.restassured.oauth20;
 
 import com.techstack.api.beans.GetCourse;
+import com.techstack.api.beans.WebAutomation;
 import com.techstack.restassured.utils.JsonUtils;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
@@ -10,7 +11,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import static com.techstack.restassured.oauth20.GetCoursesConsts.GET_COURSES;
 import static io.restassured.RestAssured.given;
@@ -87,6 +90,13 @@ public class GetCoursesUsingOAuth20 {
 
         System.out.println(course);
         System.out.println(course.getInstructor());
+
+        System.out.println(course.getCourses().getApis().get(0).getCourseTitle());
+
+        //Get the course names of WebAutomation.
+        List<String> courseNames =
+                course.getCourses().getWebAutomations()
+                        .stream().map(WebAutomation::getCourseTitle).collect(Collectors.toList());
     }
 
 }
